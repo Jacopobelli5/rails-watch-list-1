@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-center ">
+<h1><%=@list.name%></h1>
+</div>
+<div class="container d-flex justify-content-center">
+<%= link_to "home", root_path %>
+</div>
+<%= render "bookmarks/new", list: @list, bookmark: @bookmark %>
+
+<% @list.movies.each do |movie| %>
+      <% bookmark = Bookmark.find_by(list: @list, movie: movie) %>
+      <div class="container justify-content-center">
+        <div class="bg-white rounded shadow h-100">
+          <%= image_tag movie.poster_url, alt: movie.title, class: "movie-img rounded-top", width: "520px" %>
+          <div class="p-3 rounded-bottom d-flex flex-column">
+            <%= movie.title %> <span>•<%= movie.rating %> <i class="fas fa-star star-yellow"></i></span>
+            <p><%= movie.overview %></p>
+            <div class="d-flex align-items-end justify-content-between pt-4">
+              <div>
+                <p class="flex-grow-1">Comment: <%= bookmark.comment %></p>
+              </div>
+              <button class="text-right btn btn-danger"><%= link_to "delete", bookmark_path(bookmark), data: { turbo_method: :delete, turbo_confirm: "Do you want to remove #{movie.title} from your #{@list.name}"} %></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
